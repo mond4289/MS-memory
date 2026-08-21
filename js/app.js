@@ -218,7 +218,11 @@ function renderMemories() {
   const dom = today.getDate();
   const matches = STATE.photos.filter((p) => {
     const d = new Date(p.Upload_Date);
-    return d.getDate() === dom && d.getMonth() !== today.getMonth();
+    const sameDay = d.getDate() === dom;
+    const sameMonthAndYear = d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+    // ນັບເປັນ "ຄວາມຊົງຈຳ" ຖ້າວັນທີ່ກົງກັນ ແລະ ບໍ່ແມ່ນມື້ອັບໂຫລດເອງ (ບໍ່ແມ່ນເດືອນ+ປີດຽວກັນ)
+    // ຮູບທີ່ຄົບຮອບປີພໍດີ (12, 24, 36 ເດືອນ...) ຈະຢູ່ເດືອນດຽວກັນແຕ່ຄົນລະປີ — ຕ້ອງນັບລວມນຳ
+    return sameDay && !sameMonthAndYear;
   });
   if (!matches.length) {
     $("memories-list").innerHTML = `<p>${t("memories_empty")}</p>`;
