@@ -115,22 +115,17 @@ async function loadEverything() {
 function photoCardHTML(p) {
   const likedByMe = STATE.user === "mond" ? p.Like_Mond : p.Like_Som;
   const savedByMe = STATE.user === "mond" ? p.Saved_Mond : p.Saved_Som;
-  const caption = escapeHTML(p.Caption);
-  const captionHTML = caption ? `<div class="photo-caption">${caption}</div>` : "";
   return `
     <div class="photo-card" data-id="${p.ID}">
-      <div class="photo-card-media">
-        <img src="${p.Drive_URL}" alt="${caption}" loading="lazy" />
-        <div class="photo-actions">
-          <button class="btn-like" data-id="${p.ID}">
-            <img src="${iconBase()}/icon-heart-${likedByMe ? "filled" : "outline"}.png" />
-          </button>
-          <button class="btn-save" data-id="${p.ID}">
-            <img src="${iconBase()}/icon-bookmark-${savedByMe ? "filled" : "outline"}.png" />
-          </button>
-        </div>
+      <img src="${p.Drive_URL}" alt="${p.Caption || ""}" loading="lazy" />
+      <div class="photo-actions">
+        <button class="btn-like" data-id="${p.ID}">
+          <img src="${iconBase()}/icon-heart-${likedByMe ? "filled" : "outline"}.png" />
+        </button>
+        <button class="btn-save" data-id="${p.ID}">
+          <img src="${iconBase()}/icon-bookmark-${savedByMe ? "filled" : "outline"}.png" />
+        </button>
       </div>
-      ${captionHTML}
     </div>`;
 }
 
