@@ -3,7 +3,7 @@
 // ==========================================================
 
 // ❗ ວາງ URL Apps Script Web App ຂອງເຈົ້າໃສ່ບ່ອນນີ້ ຫຼັງ deploy
-const API_URL = "https://script.google.com/macros/s/AKfycbwcurg1ad1aWDJ3kdtsB0WkIxKoGHoIkhKdt9GVF1XNoS7B2WT5Grs8cmH3f803bvdbXg/exec";
+const API_URL = "PASTE_APPS_SCRIPT_WEB_APP_URL_HERE";
 
 const THEME_COLORS = { purple: "#D9C6F0", lightblue: "#BEE1F5", orange: "#FFD8A8" };
 
@@ -218,11 +218,7 @@ function renderMemories() {
   const dom = today.getDate();
   const matches = STATE.photos.filter((p) => {
     const d = new Date(p.Upload_Date);
-    const sameDay = d.getDate() === dom;
-    const sameMonthAndYear = d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
-    // ນັບເປັນ "ຄວາມຊົງຈຳ" ຖ້າວັນທີ່ກົງກັນ ແລະ ບໍ່ແມ່ນມື້ອັບໂຫລດເອງ (ບໍ່ແມ່ນເດືອນ+ປີດຽວກັນ)
-    // ຮູບທີ່ຄົບຮອບປີພໍດີ (12, 24, 36 ເດືອນ...) ຈະຢູ່ເດືອນດຽວກັນແຕ່ຄົນລະປີ — ຕ້ອງນັບລວມນຳ
-    return sameDay && !sameMonthAndYear;
+    return d.getDate() === dom && d.getMonth() !== today.getMonth();
   });
   if (!matches.length) {
     $("memories-list").innerHTML = `<p>${t("memories_empty")}</p>`;
