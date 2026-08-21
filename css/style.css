@@ -183,7 +183,15 @@ img { max-width: 100%; display: block; }
   box-shadow: var(--shadow);
   position: relative;
 }
+.photo-card-media { position: relative; }
 .photo-card img { width: 100%; display: block; }
+.photo-caption {
+  padding: 8px 10px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--text);
+  word-break: break-word;
+}
 .photo-actions {
   position: absolute;
   bottom: 6px;
