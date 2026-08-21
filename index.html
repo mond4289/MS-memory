@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title data-i18n="project_name">name project</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#D9C6F0" />
+<link rel="apple-touch-icon" href="assets/icon-192.png" />
+</head>
+<body data-theme="purple">
+
+<!-- ================= LOGIN VIEW ================= -->
+<div id="view-login">
+  <button id="login-lang-btn">ລາວ</button>
+  <div id="login-project-name" data-i18n="project_name">name project</div>
+  <img id="login-logo" src="assets/logo.png" alt="logo" />
+  <select id="login-user-select">
+    <option value="mond">mond</option>
+    <option value="som">som</option>
+  </select>
+  <button id="login-btn">ເຂົ້າສູ່ລະບົບ</button>
+</div>
+
+<!-- ================= APP SHELL ================= -->
+<div id="app" class="hidden">
+
+  <!-- Top bar -->
+  <div id="topbar">
+    <button class="icon-btn" id="btn-menu"><img data-icon="icon-menu.png" alt="menu" /></button>
+    <div id="topbar-title" data-i18n="project_name">name project</div>
+    <button class="icon-btn" id="btn-home"><img data-icon="icon-home.png" alt="home" /></button>
+    <button class="icon-btn" id="btn-upload"><img data-icon="icon-add.png" alt="add" /></button>
+    <button class="icon-btn" id="btn-search"><img data-icon="icon-search.png" alt="search" /></button>
+    <button class="icon-btn" id="btn-settings"><img data-icon="icon-settings.png" alt="settings" /></button>
+  </div>
+
+  <!-- Hamburger drawer -->
+  <div id="drawer-backdrop" class="hidden"></div>
+  <div id="drawer" class="hidden">
+    <div id="drawer-header">
+      <img src="assets/logo.png" alt="logo" />
+      <span data-i18n="project_name">name project</span>
+    </div>
+    <div class="drawer-item" data-nav="memories">
+      <img data-icon="icon-memories.png" alt="" /><span data-i18n="nav_memories">ຄວາມຊົງຈຳ</span>
+    </div>
+    <div class="drawer-item" data-nav="saved">
+      <img data-icon="icon-saved.png" alt="" /><span data-i18n="nav_saved">ບັນທຶກໄວ້ແລ້ວ</span>
+    </div>
+    <div class="drawer-item" data-nav="liked-mond">
+      <div class="avatar"></div><span data-i18n="nav_liked">ຖືກໃຈໂດຍ</span>&nbsp;mond
+    </div>
+    <div class="drawer-item" data-nav="liked-som">
+      <div class="avatar"></div><span data-i18n="nav_liked">ຖືກໃຈໂດຍ</span>&nbsp;som
+    </div>
+    <div class="drawer-item" id="drawer-logout" style="margin-top:24px;opacity:.6">
+      <span data-i18n="logout">ອອກຈາກລະບົບ</span>
+    </div>
+  </div>
+
+  <!-- Home feed -->
+  <div id="view-home">
+    <div id="feed-wrap"><div id="masonry"></div></div>
+  </div>
+
+  <!-- Memories -->
+  <div id="view-memories" class="hidden">
+    <div class="view-heading" data-i18n="nav_memories">ຄວາມຊົງຈຳ</div>
+    <div id="memories-list"></div>
+  </div>
+
+  <!-- Saved -->
+  <div id="view-saved" class="hidden">
+    <div class="view-heading" data-i18n="nav_saved">ບັນທຶກໄວ້ແລ້ວ</div>
+    <div id="saved-list"></div>
+  </div>
+
+  <!-- Liked -->
+  <div id="view-liked" class="hidden">
+    <div class="view-heading" id="liked-heading"></div>
+    <div id="liked-list"></div>
+  </div>
+
+  <!-- Search -->
+  <div id="view-search" class="hidden">
+    <div id="search-box">
+      <img data-icon="icon-search.png" alt="" />
+      <input id="search-input" type="text" data-i18n-placeholder="search_placeholder" placeholder="ຄົ້ນຫາ..." />
+    </div>
+    <div id="search-results" style="margin-top:14px"><div id="search-masonry" style="column-count:2;column-gap:10px"></div></div>
+  </div>
+
+  <!-- Upload -->
+  <div id="view-upload" class="hidden">
+    <div class="upload-source-row">
+      <button id="btn-camera"><img data-icon="icon-camera.png" alt="camera" /></button>
+      <button id="btn-gallery"><img data-icon="icon-gallery.png" alt="gallery" /></button>
+    </div>
+    <input type="file" id="file-input" accept="image/*" capture="environment" class="hidden" />
+    <img id="upload-preview" />
+    <label data-i18n="upload_detail">Detail</label>
+    <textarea id="upload-detail" rows="2"></textarea>
+    <label data-i18n="upload_caption">Caption</label>
+    <input type="text" id="upload-caption" />
+    <label data-i18n="upload_uploader">ຜູ້ບັນທຶກ</label>
+    <select id="upload-uploader">
+      <option value="mond">mond</option>
+      <option value="som">som</option>
+    </select>
+    <button id="upload-submit-btn" data-i18n="upload_submit">ອັບໂຫລດ</button>
+  </div>
+
+  <!-- Settings -->
+  <div id="view-settings" class="hidden">
+    <div id="settings-title" data-i18n="settings_title">ຕັ້ງຄ່າ</div>
+
+    <div class="settings-row">
+      <div class="settings-card">
+        <div data-i18n="settings_song">ເພງປະກອບ</div>
+        <select id="setting-song">
+          <option value="song-1" data-i18n="song1">ເພງ 1</option>
+          <option value="song-2" data-i18n="song2">ເພງ 2</option>
+          <option value="song-3" data-i18n="song3">ເພງ 3</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="settings-row">
+      <div class="settings-card">
+        <div data-i18n="settings_color">ໂທນສີ</div>
+        <select id="setting-color">
+          <option value="purple" data-i18n="color_purple">ມ່ວງ</option>
+          <option value="lightblue" data-i18n="color_lightblue">ຟ້າອ່ອນ</option>
+          <option value="orange" data-i18n="color_orange">ສົ້ມ</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="settings-row">
+      <div class="settings-card">
+        <div data-i18n="settings_lang">ພາສາ</div>
+        <select id="setting-lang">
+          <option value="lo">ລາວ</option>
+          <option value="th">ไทย</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="settings-row">
+      <div class="settings-card">
+        <div data-i18n="settings_bg">Background</div>
+        <div class="bg-choices">
+          <img src="assets/bg-1.jpg" data-bg="assets/bg-1.jpg" />
+          <img src="assets/bg-2.jpg" data-bg="assets/bg-2.jpg" />
+          <img src="assets/bg-3.jpg" data-bg="assets/bg-3.jpg" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Photo popup modal -->
+<div id="photo-modal" class="hidden">
+  <div class="modal-card">
+    <img id="modal-img" src="" alt="" />
+    <div class="modal-body">
+      <div id="modal-caption" style="font-weight:700;margin-bottom:6px"></div>
+      <div id="modal-detail" style="color:var(--text-soft);font-size:14px"></div>
+      <div id="modal-edit-form" class="hidden" style="margin-top:12px">
+        <label data-i18n="upload_caption">Caption</label>
+        <input type="text" id="edit-caption" style="width:100%;padding:10px;border-radius:10px;border:none;box-shadow:var(--shadow);margin-bottom:8px" />
+        <label data-i18n="upload_detail">Detail</label>
+        <textarea id="edit-detail" rows="2" style="width:100%;padding:10px;border-radius:10px;border:none;box-shadow:var(--shadow)"></textarea>
+      </div>
+    </div>
+    <div class="modal-buttons">
+      <button id="modal-save" data-i18n="save">ບັນທຶກ</button>
+      <button id="modal-edit" data-i18n="edit">ແກ້ໄຂ</button>
+      <button id="modal-edit-confirm" class="hidden">✓</button>
+      <button id="modal-close" data-i18n="close">ປິດ</button>
+    </div>
+  </div>
+</div>
+
+<audio id="bg-audio" loop></audio>
+
+<script>
+  // ตัวดัก error — ถ้ามีอะไรพังจะขึ้น popup บอกทันที (ชั่วคราวสำหรับดีบัก)
+  window.addEventListener("error", (e) => {
+    alert("⚠️ JS Error: " + e.message + "\n(" + (e.filename || "").split("/").pop() + ":" + e.lineno + ")");
+  });
+  window.addEventListener("unhandledrejection", (e) => {
+    alert("⚠️ Promise Error: " + (e.reason && e.reason.message ? e.reason.message : e.reason));
+  });
+</script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => navigator.serviceWorker.register("sw.js"));
+  }
+</script>
+</body>
+</html>
