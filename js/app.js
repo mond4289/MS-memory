@@ -1,8 +1,3 @@
-// ==========================================================
-// app.js — ຕົວລະບົບຫຼັກ
-// ==========================================================
-
-// ❗ ວາງ URL Apps Script Web App ຂອງເຈົ້າໃສ່ບ່ອນນີ້ ຫຼັງ deploy
 const API_URL = "https://script.google.com/macros/s/AKfycbxd8S1c1mVqi5vA7HfYZdw-mfgS1BSZY-U3k7kC9KhBI9qLZPE3REF_rx1m3TLqoiZRZg/exec";
 
 const THEME_COLORS = { purple: "#D9C6F0", lightblue: "#BEE1F5", orange: "#FFD8A8" };
