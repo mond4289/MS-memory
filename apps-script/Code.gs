@@ -1,3 +1,15 @@
+/**
+ * Code.gs — Backend ສຳລັບເວັບເກັບຄວາມຊົງຈຳ
+ * ວິທີໃຊ້:
+ * 1. ເປີດ Google Sheet ຂອງເຈົ້າ > Extensions > Apps Script
+ * 2. ວາງໂຄ້ດນີ້ທັງໝົດລົງໄປ (ລຶບໂຄ້ດເກົ່າອອກ)
+ * 3. ແກ້ DRIVE_FOLDER_ID ຖ້າຈຳເປັນ (ຕອນນີ້ໃສ່ຄ່າໂຟນເດີ Drive ຂອງເຈົ້າແລ້ວ)
+ * 4. Deploy > New deployment > Web app
+ *      - Execute as: Me
+ *      - Who has access: Anyone
+ * 5. ຄັດລອກ URL ທີ່ໄດ້ ໄປວາງໃນ js/app.js ຕົວແປ API_URL
+ */
+
 const DRIVE_FOLDER_ID = "1gJ0AMGEiF9RNUEf6GtG0fixAUsj9Fo7H"; // ໂຟນເດີ Drive ສຳລັບຮູບຄວາມຊົງຈຳ
 const PHOTOS_SHEET = "Photos";
 const SETTINGS_SHEET = "Settings";
@@ -26,15 +38,12 @@ function getSettingsSheet() {
     sh.appendRow(["CurrentSong", "song-1"]);
     sh.appendRow(["CurrentColor", "purple"]);
     sh.appendRow(["CurrentLanguage", "lo"]);
-    sh.appendRow(["CurrentBackground", "bg-1"]);
     const songRule = SpreadsheetApp.newDataValidation().requireValueInList(["song-1", "song-2", "song-3"], true).build();
     const colorRule = SpreadsheetApp.newDataValidation().requireValueInList(["purple", "lightblue", "orange"], true).build();
     const langRule = SpreadsheetApp.newDataValidation().requireValueInList(["lo", "th", "en"], true).build();
-    const bgRule = SpreadsheetApp.newDataValidation().requireValueInList(["bg-1", "bg-2", "bg-3"], true).build();
     sh.getRange("B2").setDataValidation(songRule);
     sh.getRange("B3").setDataValidation(colorRule);
     sh.getRange("B4").setDataValidation(langRule);
-    sh.getRange("B5").setDataValidation(bgRule);
   }
   return sh;
 }
@@ -56,7 +65,7 @@ function readSettings() {
   values.shift();
   const s = {};
   values.forEach(([k, v]) => (s[k] = v));
-  return { song: s.CurrentSong, color: s.CurrentColor, lang: s.CurrentLanguage, bg: s.CurrentBackground };
+  return { song: s.CurrentSong, color: s.CurrentColor, lang: s.CurrentLanguage };
 }
 
 function jsonOut(obj) {

@@ -1,5 +1,10 @@
-const API_URL = "https://https://script.google.com/macros/s/AKfycbwcurg1ad1aWDJ3kdtsB0WkIxKoGHoIkhKdt9GVF1XNoS7B2WT5Grs8cmH3f803bvdbXg/exec";
-g/exe
+// ==========================================================
+// app.js — ຕົວລະບົບຫຼັກ
+// ==========================================================
+
+// ❗ ວາງ URL Apps Script Web App ຂອງເຈົ້າໃສ່ບ່ອນນີ້ ຫຼັງ deploy
+const API_URL = "https://script.google.com/macros/s/AKfycbwcurg1ad1aWDJ3kdtsB0WkIxKoGHoIkhKdt9GVF1XNoS7B2WT5Grs8cmH3f803bvdbXg/exec";
+
 const THEME_COLORS = { purple: "#D9C6F0", lightblue: "#BEE1F5", orange: "#FFD8A8" };
 
 let STATE = {
@@ -400,6 +405,37 @@ document.querySelectorAll(".bg-choices img").forEach((img) => {
   });
 });
 
+// ---------- ໂຫລດ settings ລ່ວງໜ້າ (ກ່ອນ login) ເພື່ອໃຫ້ເພງພ້ອມຫຼິ້ນທັນທີທີ່ແຕະໜ້າຈໍ ----------
+async function preloadSettings() {
+  try {
+    const data = await apiGet("all");
+    if (data.settings) {
+      STATE.theme = data.settings.color || STATE.theme;
+      STATE.lang = data.settings.lang || STATE.lang;
+      localStorage.setItem("appLang", STATE.lang);
+      $("bg-audio").src = `assets/${data.settings.song || "song-1"}.mp3`;
+    }
+    applyTheme();
+    applyI18n();
+  } catch (e) {
+    console.error("preload settings ບໍ່ສຳເລັດ", e);
+  }
+}
+
+// ---------- ເລີ່ມຫຼິ້ນເພງທັນທີທີ່ຜູ້ໃຊ້ແຕະໜ້າຈໍຄັ້ງທຳອິດ (browser ບໍ່ອະນຸຍາດເປີດສຽງກ່ອນມີການແຕະ) ----------
+function unlockAudioOnFirstTouch() {
+  const tryPlay = () => {
+    const audio = $("bg-audio");
+    if (audio && audio.src) {
+      audio.play().catch(() => {});
+    }
+    document.removeEventListener("click", tryPlay);
+    document.removeEventListener("touchstart", tryPlay);
+  };
+  document.addEventListener("click", tryPlay, { once: true });
+  document.addEventListener("touchstart", tryPlay, { once: true });
+}
+
 // ---------- login ----------
 $("login-lang-btn").addEventListener("click", () => {
   const order = ["lo", "th", "en"];
@@ -427,6 +463,9 @@ function startApp() {
 
 if (STATE.user) {
   startApp();
+  unlockAudioOnFirstTouch();
 } else {
   applyI18n();
+  preloadSettings();
+  unlockAudioOnFirstTouch();
 }
