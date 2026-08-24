@@ -4,7 +4,7 @@
 // ==========================================================
 const I18N = {
   lo: {
-    project_name: "name project",
+    project_name: "ບັນທຶກຄວາມຊົງຈຳ",
     login_title: "ເຂົ້າສູ່ລະບົບ",
     login_select: "ເລືອກຜູ້ໃຊ້",
     login_btn: "ເຂົ້າສູ່ລະບົບ",
@@ -40,7 +40,7 @@ const I18N = {
     logout: "ອອກຈາກລະບົບ",
   },
   th: {
-    project_name: "name project",
+    project_name: "บันทึกความทรงจำ",
     login_title: "เข้าสู่ระบบ",
     login_select: "เลือกผู้ใช้",
     login_btn: "เข้าสู่ระบบ",
@@ -76,7 +76,7 @@ const I18N = {
     logout: "ออกจากระบบ",
   },
   en: {
-    project_name: "name project",
+    project_name: "Save Memories",
     login_title: "Log in",
     login_select: "Select user",
     login_btn: "Log in",

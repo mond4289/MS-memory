@@ -3,7 +3,7 @@
 // ==========================================================
 
 // ❗ ວາງ URL Apps Script Web App ຂອງເຈົ້າໃສ່ບ່ອນນີ້ ຫຼັງ deploy
-const API_URL = "https://script.google.com/macros/s/AKfycbwcurg1ad1aWDJ3kdtsB0WkIxKoGHoIkhKdt9GVF1XNoS7B2WT5Grs8cmH3f803bvdbXg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxd8S1c1mVqi5vA7HfYZdw-mfgS1BSZY-U3k7kC9KhBI9qLZPE3REF_rx1m3TLqoiZRZg/exec";
 
 const THEME_COLORS = { purple: "#D9C6F0", lightblue: "#BEE1F5", orange: "#FFD8A8" };
 
@@ -83,11 +83,15 @@ async function apiGet(action) {
   return res.json();
 }
 async function apiPost(body) {
-  const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(body) });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = await res.json();
-  if (data && data.error) throw new Error(data.error);
-  return data;
+  // ໝາຍເຫດ: ໃຊ້ mode "no-cors" ເພື່ອຫຼີກລ່ຽງບັນຫາ CORS/redirect ຂອງ Google Apps Script
+  // ຕອນ POST ຈາກ browser ໂດຍກົງ (GET ບໍ່ມີບັນຫານີ້). ຜົນຄື: ອ່ານ response ກັບຄືນບໍ່ໄດ້
+  // ແຕ່ຄວາມໜັກແໜ້ນສູງກວ່າຫຼາຍ — ຂໍ້ມູນຈິງຈະຖືກກວດຄືນຜ່ານ loadEverything() (GET) ຫຼັງຈາກນັ້ນ
+  try {
+    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(body) });
+    return { ok: true };
+  } catch (err) {
+    throw new Error("ເຊື່ອມຕໍ່ບໍ່ໄດ້ (ເນັດ ຫຼື URL ຜິດ): " + err.message);
+  }
 }
 
 async function loadEverything() {
@@ -97,11 +101,15 @@ async function loadEverything() {
     if (data.settings) {
       STATE.theme = data.settings.color || STATE.theme;
       STATE.lang = data.settings.lang || STATE.lang;
+      STATE.bg = data.settings.bg ? `assets/${data.settings.bg}.jpg` : STATE.bg;
       localStorage.setItem("appLang", STATE.lang);
       $("bg-audio").src = `assets/${data.settings.song || "song-1"}.mp3`;
       $("setting-song").value = data.settings.song || "song-1";
       $("setting-color").value = STATE.theme;
       $("setting-lang").value = STATE.lang;
+      document.querySelectorAll(".bg-choices img").forEach((img) => {
+        img.classList.toggle("selected", img.dataset.bg === STATE.bg);
+      });
     }
     applyTheme();
     applyI18n();
@@ -381,12 +389,19 @@ $("setting-lang").addEventListener("change", async (e) => {
   await apiPost({ action: "settings", key: "CurrentLanguage", value: e.target.value });
 });
 document.querySelectorAll(".bg-choices img").forEach((img) => {
-  img.addEventListener("click", () => {
+  img.addEventListener("click", async () => {
     STATE.bg = img.dataset.bg;
     localStorage.setItem("appBg", STATE.bg);
     applyTheme();
     document.querySelectorAll(".bg-choices img").forEach((i) => i.classList.remove("selected"));
     img.classList.add("selected");
+    // ດຶງຊື່ໄຟລ໌ອອກຈາກ path ເຊັ່ນ "assets/bg-1.jpg" -> "bg-1"
+    const bgName = STATE.bg.split("/").pop().replace(/\.[a-zA-Z0-9]+$/, "");
+    try {
+      await apiPost({ action: "settings", key: "CurrentBackground", value: bgName });
+    } catch (err) {
+      console.error(err);
+    }
   });
 });
 
